@@ -3,6 +3,8 @@ import Image from 'next/image';
 import cx from 'classnames';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
+import { LuHeart } from "react-icons/lu";
+import { FaCartPlus } from "react-icons/fa";
 
 import { BASE_URL } from '@/constants';
 import { formatVndCurrency } from '@/utils/format';
@@ -10,12 +12,16 @@ import { formatVndCurrency } from '@/utils/format';
 import "swiper/css";
 import "swiper/css/pagination";
 
-interface IProductThumbnail {
+export interface IProductThumbnail {
     id: number;
     thumbnail: string;
     title: string;
     price: string;
     discount_price: string;
+}
+
+export interface IItemSetting {
+    is_product_page?: boolean;
 }
 
 export const ListProduct: React.FC = () => {
@@ -62,11 +68,12 @@ export const ListProduct: React.FC = () => {
     )
 }
 
-const ProductThumbnail: React.FC<IProductThumbnail> = ({
+export const ProductThumbnail: React.FC<IProductThumbnail & IItemSetting> = ({
     thumbnail,
     title,
     price,
-    discount_price
+    discount_price,
+    is_product_page
 }) => {
     const renderPrice = useCallback(() => {
         if (!!+discount_price) {
@@ -89,17 +96,41 @@ const ProductThumbnail: React.FC<IProductThumbnail> = ({
     }, [discount_price, price]);
 
     return (
-        <div className="product-thumbnail flex flex-col ml-[30px] first:ml-0">
+        <div className={cx(
+            'bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700',
+            'product-thumbnail p-2 flex flex-col ml-[30px] w-[270px]',
+            {
+                'first:ml-0': !is_product_page
+            }
+        )}>
             <div className='relative group'>
-                <Image
-                    src={thumbnail}
-                    alt={title}
-                    width={270}
-                    height={250}
-                />
+                <div>
+                    <div className='relative'>
+                    <Image
+                        src={thumbnail}
+                        alt={title}
+                        width={270}
+                        height={250}
+                    />
+                    <div className={cx(
+                        'absolute right-3 top-3',
+                        'rounded-full bg-white w-[34px] h-[34px]',
+                        'flex items-center justify-center'
+                    )}>
+                        <LuHeart />
+                    </div>
+                    <div className={cx(
+                        'absolute right-3 top-14',
+                        'rounded-full bg-white w-[34px] h-[34px]',
+                        'flex items-center justify-center'
+                    )}>
+                        <FaCartPlus />
+                    </div>
+                    </div>
+                </div>
                 <div className={cx(
-                    'w-[270px] h-[40px] bg-[#000]',
-                    'absolute left-0 bottom-0 right-0 h-0',
+                    'w-[270px] bg-[#000]',
+                    'absolute left-0 bottom-0 right-0 h-0 overflow-hidden',
                     'group-hover:h-[40px] duration-200 cursor-pointer'
                 )}>
                     <div className='text-base text-[#fff] leading-10 text-center'>
@@ -107,7 +138,7 @@ const ProductThumbnail: React.FC<IProductThumbnail> = ({
                     </div>
                 </div>
             </div>
-            <h4 className='mt-4 font-medium text-base'>
+            <h4 className='mt-12 font-medium text-base'>
                 {title}
             </h4>
             <div className='mt-2'>
