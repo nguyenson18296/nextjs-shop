@@ -1,7 +1,10 @@
 import { ProductList } from "@/components/ProductList/ProductList"
 import { FilterBar } from "@/components/ProductList/FilterBar/FilterBar"
 
-export default async function Products() {
+export default async function Products({
+    searchParams
+}) {
+    console.log("searchParams", searchParams);
     return (
         <div className="wrapper py-10 px-24">
             <div className="product-page-content flex">

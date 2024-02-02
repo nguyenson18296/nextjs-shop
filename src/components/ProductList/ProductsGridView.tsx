@@ -8,9 +8,10 @@ import { Loading } from "../common/Loading";
 
 interface IProductGridView {
   products: IProductThumbnail[];
+  isLoading: boolean;
 }
 
-export const ProductsGridView: React.FC<IProductGridView> = ({ products }) => {
+export const ProductsGridView: React.FC<IProductGridView> = ({ products, isLoading }) => {
   return (
     <div
         className={cx(
@@ -18,13 +19,13 @@ export const ProductsGridView: React.FC<IProductGridView> = ({ products }) => {
                 'flex items-center justify-center': !!products,
                 'grid': products?.length > 0
             },
-            "grid-cols-4 gap-x-6 gap-y-12"
+            "grid-cols-4 grid-flow-row-dense lg:grid-cols-4 md:grid-cols-3 gap-x-6 gap-y-12"
         )}
         style={{
             minHeight: `calc(100vh - 400px)`
         }}
     >
-      {products?.length > 0 ? (
+      {!isLoading ? (
         (products || []).map((product) => (
           <ProductThumbnail
             key={product.id}
