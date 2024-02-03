@@ -2,10 +2,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-import { IProductThumbnail } from "../ProductThumbnail/ProductThumbnail";
+import { DisplayBar } from "./DisplayBar/DisplayBar";
 import { ProductsGridView } from "./ProductsGridView";
-import { useAppDispatch } from "@/libs/hooks/useRedux";
-import { getProductsAction } from "@/libs/store/listProductsSlice";
+import { ProductsListView } from "./ProductListView";
+import { useAppDispatch, useAppSelector } from "@/libs/hooks/useRedux";
+import { getProductsAction, getTotal } from "@/libs/store/listProductsSlice";
 import { BASE_URL } from "@/constants";
 import { FilterItems } from "../common/FilterItem";
 
@@ -14,6 +15,7 @@ export const ProductList: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
+  const displayType = useAppSelector(state => state.productsSlice.displayType);
 
   const category_ids = searchParams.get("category_id");
 
@@ -30,6 +32,7 @@ export const ProductList: React.FC = () => {
     const data = await response.json();
     setProducts(data.data);
     dispatch(getProductsAction(data.data))
+    dispatch(getTotal(data.total))
     setIsLoading(false);
   }, [category_ids, dispatch]);
 
@@ -37,10 +40,20 @@ export const ProductList: React.FC = () => {
     getProducts();
   }, [getProducts]);
 
+  const renderProductsList = useCallback(() => {
+    if (displayType === 'grid') {
+      return (
+        <ProductsGridView products={products} isLoading={isLoading} />
+      )
+    }
+    return <ProductsListView products={products} isLoading={isLoading} />
+  }, [displayType, isLoading, products]);
+
   return (
     <div>
+      <DisplayBar />
       <FilterItems />
-      <ProductsGridView products={products} isLoading={isLoading} />
+      {renderProductsList()}
     </div>
   );
 };
