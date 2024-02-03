@@ -18,6 +18,7 @@ export interface IProductThumbnail {
     title: string;
     price: string;
     discount_price: string;
+    description?: string;
 }
 
 export interface IItemSetting {
@@ -98,7 +99,7 @@ export const ProductThumbnail: React.FC<IProductThumbnail & IItemSetting> = ({
     return (
         <div className={cx(
             'bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700',
-            'product-thumbnail p-2 flex flex-col ml-[30px] w-[270px]',
+            'product-thumbnail pt-2 flex flex-col',
             {
                 'first:ml-0': !is_product_page
             }
@@ -138,11 +139,13 @@ export const ProductThumbnail: React.FC<IProductThumbnail & IItemSetting> = ({
                     </div>
                 </div>
             </div>
-            <h4 className='mt-12 font-medium text-base'>
-                {title}
-            </h4>
-            <div className='mt-2'>
-                {renderPrice()}
+            <div className='p-2'>
+                <h4 className='mt-12 font-medium text-base'>
+                    {title}
+                </h4>
+                <div className='mt-2'>
+                    {renderPrice()}
+                </div>
             </div>
         </div>
     )

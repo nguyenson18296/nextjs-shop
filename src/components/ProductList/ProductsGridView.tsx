@@ -19,7 +19,7 @@ export const ProductsGridView: React.FC<IProductGridView> = ({ products, isLoadi
                 'flex items-center justify-center': !!products,
                 'grid': products?.length > 0
             },
-            "grid-cols-4 grid-flow-row-dense lg:grid-cols-4 md:grid-cols-3 gap-x-6 gap-y-12"
+            "grid-flow-row-dense grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-x-6 gap-y-12"
         )}
         style={{
             minHeight: `calc(100vh - 400px)`

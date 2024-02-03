@@ -5,6 +5,8 @@ export interface IFIlterCard {
     name: string;
 }
 
+export type TDisplayType = 'list' | 'grid';
+
 interface IProduct {
     id: number;
     thumbnail: string;
@@ -15,12 +17,16 @@ interface IProduct {
 
 interface IProductState {
     products: IProduct[],
-    filters: IFIlterCard[]
+    total: number;
+    filters: IFIlterCard[],
+    displayType: TDisplayType
 }
 
 const initialState: IProductState = {
     products: [],
-    filters: []
+    total: 0,
+    filters: [],
+    displayType: 'list'
 }
 
 const productsSlice = createSlice({
@@ -30,12 +36,18 @@ const productsSlice = createSlice({
         getProductsAction(state, action: PayloadAction<IProduct[]>) {
             state.products = action.payload;
         },
+        getTotal(state, action: PayloadAction<number>) {
+            state.total = action.payload;
+        },
         setFilters(state, action: PayloadAction<IFIlterCard[]>) {
             state.filters = action.payload
+        },
+        setDisplayType(state, action: PayloadAction<TDisplayType>) {
+            state.displayType = action.payload
         }
     }
 })
 
-export const { getProductsAction, setFilters } = productsSlice.actions;
+export const { getProductsAction, setFilters, setDisplayType, getTotal } = productsSlice.actions;
 
 export default productsSlice.reducer
