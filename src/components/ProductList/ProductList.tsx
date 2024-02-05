@@ -6,21 +6,23 @@ import { DisplayBar } from "./DisplayBar/DisplayBar";
 import { ProductsGridView } from "./ProductsGridView";
 import { ProductsListView } from "./ProductListView";
 import { useAppDispatch, useAppSelector } from "@/libs/hooks/useRedux";
-import { getProductsAction, getTotal } from "@/libs/store/listProductsSlice";
+import { getProductsAction, getTotal, setIsLoading } from "@/libs/store/listProductsSlice";
 import { BASE_URL } from "@/constants";
 import { FilterItems } from "../common/FilterItem";
 
 export const ProductList: React.FC = () => {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [products, setProducts] = useState([]);
+  // const [isLoading, setIsLoading] = useState(true);
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const displayType = useAppSelector(state => state.productsSlice.displayType);
+  const products = useAppSelector(state => state.productsSlice.products);
+  const isLoading = useAppSelector(state => state.productsSlice.isLoading);
 
   const category_ids = searchParams.get("category_id");
 
   const getProducts = useCallback(async () => {
-    setIsLoading(true);
+    dispatch(setIsLoading(true));
     const response = await fetch(
       `${BASE_URL}/products?${
         !!category_ids ? `category_ids=${category_ids}` : ""
@@ -30,10 +32,9 @@ export const ProductList: React.FC = () => {
       }
     );
     const data = await response.json();
-    setProducts(data.data);
     dispatch(getProductsAction(data.data))
     dispatch(getTotal(data.total))
-    setIsLoading(false);
+    dispatch(setIsLoading(false))
   }, [category_ids, dispatch]);
 
   useEffect(() => {
@@ -53,7 +54,9 @@ export const ProductList: React.FC = () => {
     <div>
       <DisplayBar />
       <FilterItems />
-      {renderProductsList()}
+      <div className="relative min-h-[400px] mt-4 w-full">
+        {renderProductsList()}
+      </div>
     </div>
   );
 };
