@@ -16,6 +16,7 @@ interface IProduct {
 }
 
 interface IProductState {
+    isLoading: boolean;
     products: IProduct[],
     total: number;
     filters: IFIlterCard[],
@@ -23,6 +24,7 @@ interface IProductState {
 }
 
 const initialState: IProductState = {
+    isLoading: true,
     products: [],
     total: 0,
     filters: [],
@@ -44,10 +46,13 @@ const productsSlice = createSlice({
         },
         setDisplayType(state, action: PayloadAction<TDisplayType>) {
             state.displayType = action.payload
+        },
+        setIsLoading(state, action: PayloadAction<boolean>) {
+            state.isLoading = action.payload
         }
     }
 })
 
-export const { getProductsAction, setFilters, setDisplayType, getTotal } = productsSlice.actions;
+export const { getProductsAction, setFilters, setDisplayType, getTotal, setIsLoading } = productsSlice.actions;
 
 export default productsSlice.reducer

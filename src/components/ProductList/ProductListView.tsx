@@ -26,7 +26,9 @@ export const ProductsListView: React.FC<IProductsListView> = ({
                 />
                 ))
             ) : (
-                <Loading />
+                <div className='absolute bg-white top-1/2 left-1/2'>
+                    <Loading />
+                </div>
             )}
         </>
     )

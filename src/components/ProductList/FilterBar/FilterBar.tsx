@@ -2,6 +2,7 @@
 import { useState, useCallback, useEffect } from 'react';
 
 import { FilterBarSectionItem } from "./FilterBarSectionItem"
+import { PriceRangeFilter } from '@/components/common/PriceRange';
 import { BASE_URL } from '@/constants';
 
 interface IFilterItem {
@@ -32,6 +33,7 @@ export const FilterBar: React.FC = () => {
                 sectionName="Category"
                 items={categories}
             />
+            <PriceRangeFilter />
         </div>
     )
 }
