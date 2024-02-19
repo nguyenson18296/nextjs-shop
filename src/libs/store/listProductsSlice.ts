@@ -12,7 +12,9 @@ interface IProduct {
     thumbnail: string;
     title: string;
     price: string;
-    discount_price: string;
+    discount_price?: string;
+    images?: string[];
+    slug: string;
 }
 
 interface IProductState {

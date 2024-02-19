@@ -7,7 +7,7 @@ import { LuHeart } from "react-icons/lu";
 import { FaCartPlus } from "react-icons/fa";
 
 import { BASE_URL } from '@/constants';
-import { formatVndCurrency } from '@/utils/format';
+import { DisplayPrice } from '../DisplayPrice/DisplayPrice';
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -17,8 +17,10 @@ export interface IProductThumbnail {
     thumbnail: string;
     title: string;
     price: string;
-    discount_price: string;
+    discount_price?: string;
     description?: string;
+    images?: string[];
+    slug: string;
 }
 
 export interface IItemSetting {
@@ -76,26 +78,6 @@ export const ProductThumbnail: React.FC<IProductThumbnail & IItemSetting> = ({
     discount_price,
     is_product_page
 }) => {
-    const renderPrice = useCallback(() => {
-        if (!!+discount_price) {
-            return (
-                <>
-                    <span className='text-base text-[#DB4444]'>
-                        {formatVndCurrency(+discount_price)}
-                    </span>
-                    <span className='text-base text-[#000] ml-3 line-through'>
-                        {formatVndCurrency(+price)}
-                    </span>
-                </>
-            )
-        }
-        return (
-            <span className='text-base text-[#000]'>
-                {formatVndCurrency(+price)}
-            </span>
-        )
-    }, [discount_price, price]);
-
     return (
         <div className={cx(
             'bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700',
@@ -144,7 +126,7 @@ export const ProductThumbnail: React.FC<IProductThumbnail & IItemSetting> = ({
                     {title}
                 </h4>
                 <div className='mt-2'>
-                    {renderPrice()}
+                    <DisplayPrice price={price} discount_price={discount_price} />
                 </div>
             </div>
         </div>

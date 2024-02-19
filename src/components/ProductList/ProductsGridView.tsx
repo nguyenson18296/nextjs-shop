@@ -31,6 +31,7 @@ export const ProductsGridView: React.FC<IProductGridView> = ({ products, isLoadi
             key={product.id}
             id={product.id}
             title={product.title}
+            slug={product.slug}
             thumbnail={product.thumbnail}
             price={product.price}
             discount_price={product.discount_price}
