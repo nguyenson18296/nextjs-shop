@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { IoLogIn } from "react-icons/io5";
 
+import { NavbarDropdown } from "../Dropdown/Dropdown";
 import { BASE_URL } from "@/constants";
 
 interface INavItem {
@@ -14,6 +15,8 @@ interface INavItem {
 
 export const Navbar: React.FC = () => {
   const [navItems, setNavItems] = useState<INavItem[]>([]);
+  const access_token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user') || '');
 
   const getCategories = useCallback(async () => {
     const response = await fetch(`${BASE_URL}/categories`, {
@@ -31,6 +34,22 @@ export const Navbar: React.FC = () => {
   useEffect(() => {
     getCategories();
   }, [getCategories]);
+
+  const renderLoginButton = useCallback(() => {
+    if (access_token) {
+      return (
+        <NavbarDropdown />
+      )
+    }
+    return (
+      <a href="/dang-nhap" className="flex justify-end items-center">
+            <IoLogIn />
+            <span>
+                Đăng nhập
+            </span>
+        </a>
+    )
+  }, [access_token]);
 
   return (
     <nav className="w-full bg-[#ffd400] py-3">
@@ -52,12 +71,7 @@ export const Navbar: React.FC = () => {
             ))}
           </ul>
           <div className="navbar-action text-right flex-[0_0_20%]">
-            <a href="/dang-nhap" className="flex justify-end items-center">
-                <IoLogIn />
-                <span>
-                    Đăng nhập
-                </span>
-            </a>
+            {renderLoginButton()}
           </div>
         </div>
       </div>
