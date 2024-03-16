@@ -6,7 +6,7 @@ import qrCode from '../../assets/qr-code.png';
 
 export const Footer: React.FC = () => {
     return (
-        <footer className="flex justify-between bg-[#000] text-white py-[80px] px-24">
+        <footer className="flex justify-between bg-[#000] text-white py-[80px] px-24 w-full">
             <div className="flex-[0_0_15%]">
                 <p className='text-2xl font-bold mb-6'>
                     Exclusive

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useCallback, useState } from "react";
 import cx from "classnames";
 import {
@@ -9,6 +9,7 @@ import {
 } from "react-icons/md";
 
 import { ITab, Tabs } from "@/components/common/Tabs/Tabs";
+import { IComment, ReviewProduct } from "@/components/ReviewProduct/ReviewProduct";
 
 const LIST_TABS = [
   {
@@ -37,39 +38,35 @@ interface IDescription {
   description: string;
 }
 
-const Description: React.FC<IDescription> = ({
-  description
-}) => {
-  return (
-    <div>
-      {description}
-    </div>
-  );
+const Description: React.FC<IDescription> = ({ description }) => {
+  return <div>{description}</div>;
 };
 
-// const LIST_CONTENTS: Record<string, React.ReactNode> = {
-//     description: <Description />
-// }
-
 interface IProductDescription {
+  id: number;
   description: string;
+  comments: IComment[]
 }
 
 export const ProductDescription: React.FC<IProductDescription> = ({
-  description
+  id,
+  description,
+  comments
 }) => {
-    const [selectedTab, setSelectedTab] = useState<ITab>(LIST_TABS[0]);
+  const [selectedTab, setSelectedTab] = useState<ITab>(LIST_TABS[0]);
 
-    const onSelectTab = useCallback((tab: ITab) => {
-        setSelectedTab(tab);
-    }, []);
+  const onSelectTab = useCallback((tab: ITab) => {
+    setSelectedTab(tab);
+  }, []);
 
-    const renderTabContent = useCallback(() => {
-      switch (selectedTab.key) {
-        case "description":
-          return <Description description={description} />;
-      }
-    }, [selectedTab.key, description]);
+  const renderTabContent = useCallback(() => {
+    switch (selectedTab.key) {
+      case "description":
+        return <Description description={description} />;
+      case "reviews":
+        return <ReviewProduct product_id={id} comments={comments} />;
+    }
+  }, [selectedTab.key, description, id, comments]);
 
   return (
     <div
@@ -81,10 +78,12 @@ export const ProductDescription: React.FC<IProductDescription> = ({
         "flex-[0_0_70%]"
       )}
     >
-      <Tabs tabs={LIST_TABS} activeTab={selectedTab} onSelectTab={onSelectTab} />
-      <div className="mt-2 min-h-[200px] bg-white">
-        {renderTabContent()}
-      </div>
+      <Tabs
+        tabs={LIST_TABS}
+        activeTab={selectedTab}
+        onSelectTab={onSelectTab}
+      />
+      <div className="mt-2 min-h-[200px] h-[calc(100%-50px)] relative">{renderTabContent()}</div>
     </div>
   );
 };

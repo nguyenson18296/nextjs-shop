@@ -63,7 +63,6 @@ export const FilterBarSectionItem: React.FC<IFilterBarSectionItem> = ({
         (item) => item.id === +value
       ) as IFilterValue;
       if (selectedFilter.map((item) => item.id).includes(+value)) {
-        console.log("aaaaaa");
         const cloneArr = [...selectedFilter];
         remove(cloneArr, (item) => item.id === +value);
         dispatch(setFilters(cloneArr));

@@ -21,7 +21,7 @@ export const Tabs: React.FC<ITabs> = ({ tabs, activeTab, onSelectTab }) => {
       'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500': activeTab.key === tab.key
     });
     return (
-        <li className={classNames} onClick={() => onSelectTab(tab)}>
+        <li key={tab.key} className={classNames} onClick={() => onSelectTab(tab)}>
             <span className="w-4 h-4 me-2 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300">
                 {tab.icon}
             </span>
