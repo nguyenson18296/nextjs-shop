@@ -42,6 +42,7 @@ export const LoginForm: React.FC = () => {
                 const userProfile = {
                     username: dataJson.data.username,
                     id: dataJson.data.id,
+                    role: dataJson.data.role,
                     avatar: dataJson.data.avatar ?? 'http://res.cloudinary.com/dou7jklnk/image/upload/v1708606501/qxayjksgqntvriiuprvh.webp'
                 }
                 dispatch(getUsersProfile(userProfile))
