@@ -48,7 +48,6 @@ export const PriceRangeFilter: React.FC = () => {
       }
     );
     const data = await response.json();
-    console.log("data", data);
     dispatch(getProductsAction(data.data));
     dispatch(getTotal(data.total));
     dispatch(setIsLoading(false));

@@ -39,7 +39,6 @@ export const ProductListViewItem: React.FC<IProductThumbnail> = ({
   description,
   slug,
 }) => {
-  console.log("slug", slug);
   const renderPrice = useCallback(() => {
     if (!!+discount_price) {
       return (
