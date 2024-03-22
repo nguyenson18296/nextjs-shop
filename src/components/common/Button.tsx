@@ -1,4 +1,5 @@
-import { ButtonHTMLAttributes, useMemo } from "react";
+import { ButtonHTMLAttributes, ReactElement, ReactNode, useMemo } from "react";
+import { IconType } from "react-icons";
 import cx from 'classnames';
 
 enum ButtonEnum {
@@ -11,6 +12,7 @@ enum ButtonEnum {
 type ButtonType = `${ButtonEnum}`;
 
 interface IButton {
+    children?: ReactNode;
     buttonType?: ButtonType
 }
 
@@ -19,6 +21,7 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & IButton>
     name,
     className,
     type = 'button',
+    children,
     ...props
 }) => {
     const getButtonClasses = useMemo(() => {
@@ -44,7 +47,7 @@ export const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & IButton>
             name={name}
             {...props}
         >
-            {name}
+            {children || name}
         </button>
     )
 }
