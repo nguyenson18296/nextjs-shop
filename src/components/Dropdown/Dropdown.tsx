@@ -1,8 +1,35 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import cx from "classnames";
+import Link from "next/link";
+import { IoCartSharp } from "react-icons/io5";
+
+import { useAppSelector, useAppDispatch } from "@/libs/hooks/useRedux";
+import { getUsersProfile } from "@/libs/store/usersSlice";
+import { BASE_URL } from "@/constants";
+import { addToCart } from "@/libs/store/listProductsSlice";
 
 export const NavbarDropdown: React.FC = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const inCart = useAppSelector((state) => state.productsSlice.in_cart);
+  const dispatch = useAppDispatch();
+
+  const user = useAppSelector(state => state.user.userProfile);
+
+  const getUserProfile = useCallback(async () => {
+    const response = await fetch(`${BASE_URL}/users/1`);
+    const data = await response.json();
+    dispatch(getUsersProfile(data.data));
+    const getMyCartResponse = await fetch(`${BASE_URL}/cart/${data.data.id}`)
+    const dataMyCart = await getMyCartResponse.json();
+    console.log("dataMyCart.data.items", dataMyCart.data.items);
+    dispatch(addToCart(dataMyCart.data.items.map((item: any) => item.id)))
+  }, [dispatch]);
+
+  console.log("inCart", inCart);
+
+  useEffect(() => {
+    getUserProfile();
+  }, [getUserProfile]);
 
   const onToggleMenu = useCallback(() => {
     setIsOpenMenu((prevState) => !prevState);
@@ -16,7 +43,9 @@ export const NavbarDropdown: React.FC = () => {
       <div className="flex items-center">
         <div>
           Xin chào&nbsp;
-          <span>Son</span>
+          <span>
+            {user?.username}
+          </span>
         </div>
         <svg
           className="w-2.5 h-2.5 ms-3"
@@ -46,28 +75,21 @@ export const NavbarDropdown: React.FC = () => {
           aria-labelledby="dropdownUsersButton"
         >
           <li>
-            <a
-              href="#"
+            <Link
+              href="/gio-hang"
+              replace={false}
               className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
-              Jese Leos
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Robert Gough
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Bonnie Green
-            </a>
+              <span>
+                Giỏ hàng:
+              </span>
+              <div className="relative">
+                <IoCartSharp className="ml-2 w-[30px] h-[30px]" />
+                <span className="absolute right-0 top-0 bg-[red] text-white w-[15px] h-[15px] text-center text-xs rounded-full">
+                  {inCart.length}
+                </span>
+              </div>
+            </Link>
           </li>
         </ul>
         <a
