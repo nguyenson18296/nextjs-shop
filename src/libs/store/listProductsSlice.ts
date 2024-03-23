@@ -58,12 +58,12 @@ const productsSlice = createSlice({
       if (Array.isArray(action.payload)) {
         action.payload.forEach((id) => {
           if (!state.in_cart.includes(id)) {
-            state.in_cart.push(id);
+            state.in_cart = state.in_cart.concat(id);
           }
         });
       } else {
         if (!state.in_cart.includes(action.payload)) {
-          state.in_cart.push(action.payload);
+          state.in_cart = state.in_cart.concat(action.payload);
         }
       }
     },

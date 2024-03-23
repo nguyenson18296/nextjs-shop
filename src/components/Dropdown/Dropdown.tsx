@@ -21,11 +21,8 @@ export const NavbarDropdown: React.FC = () => {
     dispatch(getUsersProfile(data.data));
     const getMyCartResponse = await fetch(`${BASE_URL}/cart/${data.data.id}`)
     const dataMyCart = await getMyCartResponse.json();
-    console.log("dataMyCart.data.items", dataMyCart.data.items);
-    dispatch(addToCart(dataMyCart.data.items.map((item: any) => item.id)))
+    dispatch(addToCart(dataMyCart.data.items.map((item: any) => item.product.id)))
   }, [dispatch]);
-
-  console.log("inCart", inCart);
 
   useEffect(() => {
     getUserProfile();

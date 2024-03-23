@@ -1,10 +1,8 @@
 "use client"
 import React, { useCallback, useState } from "react";
 import cx from "classnames";
-import { FaMinus, FaPlus } from "react-icons/fa";
 
 import { Modal } from "@/components/common/Modal";
-import { Toast } from "@/components/common/Toast/Toast";
 import { useAppDispatch, useAppSelector } from "@/libs/hooks/useRedux";
 import { ProductDetailImages } from "./ProductDetailImages";
 import { DisplayPrice } from "@/components/DisplayPrice/DisplayPrice";
@@ -13,7 +11,7 @@ import { IProductDetail } from '../ProductDetail';
 import { Button } from "@/components/common/Button";
 import { addToCart } from "@/libs/store/listProductsSlice";
 import { BASE_URL } from "@/constants";
-import { getUsersProfile } from "@/libs/store/usersSlice";
+import { ProductInputQuantity } from "@/components/common/ProductInputQuantity/ProductInputQuantity";
 
 export const ProductIntroduce: React.FC<IProductDetail> = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
@@ -42,19 +40,6 @@ export const ProductIntroduce: React.FC<IProductDetail> = ({ product }) => {
       console.error(e);
     }
   }, [dispatch, user.id, quantity, product.id]);
-
-  const decreaseQuantity = useCallback(() => {
-    setQuantity(quantity => quantity - 1)
-  }, []);
-
-  const increaseQuantity = useCallback(() => {
-    setQuantity(quantity => quantity + 1)
-  }, []);
-
-  const onChangeQuantity = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-    const { value } = e.currentTarget;
-    setQuantity(+value);
-  }, []);
 
   const onCloseModal = useCallback(() => {
     setOpenModal(false);
@@ -139,30 +124,7 @@ export const ProductIntroduce: React.FC<IProductDetail> = ({ product }) => {
             <h3 className="flex-[0_0_50%]">
               Số lượng
             </h3>
-            <div className="flex items-center flex-[0_0_50%]">
-              <div className="input-quantity flex items-center">
-                <button
-                  className={cx("w-[32px] h-[32px] border border-gray-200 flex items-center justify-center cursor-pointer", {
-                    disabled: quantity < 2
-                  })}
-                  onClick={decreaseQuantity}
-                  disabled={quantity < 2}
-                >
-                  <FaMinus />
-                </button>
-                <input
-                  className="h-[32px] w-[50px] border border-gray-200 text-center"
-                  value={quantity}
-                  onClick={onChangeQuantity}
-                />
-                <button
-                  className="w-[32px] h-[32px] border border-gray-200 flex items-center justify-center cursor-pointer"
-                  onClick={increaseQuantity}
-                >
-                  <FaPlus />
-                </button>
-              </div>
-            </div>
+            <ProductInputQuantity disabled={quantity < 2} quantity={quantity} setQuantity={setQuantity} />
           </div>
           <div className="inline-flex rounded-md shadow-sm mt-2" role="group">
             <Button

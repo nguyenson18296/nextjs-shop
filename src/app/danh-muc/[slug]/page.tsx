@@ -8,31 +8,26 @@ const inter = Poppins({
 });
 
 interface IProducts {
-    params: {
-        slug: string;
-      };
+  params: {
+    slug: string;
+  };
 }
 
 export default async function Page({ params: { slug } }: IProducts) {
-    const items = await getData(slug);
+  const items = await getData(slug);
 
-    console.log("items", items);
-  
-    return (
-      <div className={inter.className}>
-      </div>
-    );
+  return <div className={inter.className}></div>;
+}
+
+async function getData(slug: string) {
+  const res = await fetch(`${BASE_URL}/products/${slug}`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data");
   }
 
-  async function getData(slug: string) {
-    const res = await fetch(`${BASE_URL}/products/${slug}`, {
-      cache: "no-store",
-    });
-  
-    if (!res.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      throw new Error("Failed to fetch data");
-    }
-  
-    return res.json();
-  }
+  return res.json();
+}

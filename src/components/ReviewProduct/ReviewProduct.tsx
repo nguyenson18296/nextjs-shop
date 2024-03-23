@@ -122,16 +122,13 @@ export const ReviewProduct: React.FC<IReviewProduct> = ({
       const foundIndex = cloneComments.findIndex(
         (comment) => comment.id === parent_comment_id
       );
-      console.log("foundIndex", foundIndex);
       if (foundIndex !== -1) {
-          console.log("kkkkk")
           const updatedChildIndex = cloneComments[foundIndex].replies.findIndex(item => item.id === comment_id);
           if (updatedChildIndex !== -1) {
             cloneComments[foundIndex].replies[updatedChildIndex].content = content
           }
       } else {
         const indexParent = cloneComments.findIndex(item => item.id === comment_id);
-        console.log("indexParent", indexParent);
         if (indexParent !== -1) {
           cloneComments[indexParent].content = content;
         }

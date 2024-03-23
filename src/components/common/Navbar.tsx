@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,10 +13,11 @@ interface INavItem {
   slug: string;
 }
 
+const ISSERVER = typeof window === "undefined";
+
 export const Navbar: React.FC = () => {
   const [navItems, setNavItems] = useState<INavItem[]>([]);
   const access_token = localStorage.getItem('token');
-  const user = JSON.parse(localStorage.getItem('user') || '');
 
   const getCategories = useCallback(async () => {
     const response = await fetch(`${BASE_URL}/categories`, {
