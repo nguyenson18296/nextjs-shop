@@ -1,6 +1,7 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useEffect } from "react";
 
 import { useOnClickOutside } from "@/hooks/useOnClickOutside";
+import { KeyboardNameEnum } from "@/constants/types";
 
 interface IModal {
   showHeader?: boolean;
@@ -26,6 +27,15 @@ export const Modal: React.FC<IModal> = ({
   onSubmit
 }) => {
   const ref = useRef<HTMLDivElement>(null)
+  const modalRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+      setTimeout(() => {
+        if (open && modalRef.current) {
+          modalRef.current.focus()
+        }
+      }, 500)
+  }, [open]);
 
   const handleClickOutside = useCallback(() => {
     onCancel?.();
@@ -33,18 +43,26 @@ export const Modal: React.FC<IModal> = ({
 
   useOnClickOutside(ref, handleClickOutside)
 
+  const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === KeyboardNameEnum.ESCAPE) {
+      onCancel?.();
+    }
+  }, [onCancel]);
+
   if (!open) {
     return ''
   }
 
   return (
     <div
+      onKeyDown={onKeyDown}
+      ref={modalRef}
       id="default-modal"
       tabIndex={-1}
       aria-hidden="true"
       className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-slate-300/50"
     >
-      <div ref={ref} className="absolute p-4 w-full max-w-2xl max-h-full top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2">
+      <div onKeyDown={onKeyDown} ref={ref} className="absolute p-4 w-full max-w-2xl max-h-full top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2">
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
           {showHeader && (
              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">

@@ -67,9 +67,11 @@ export const ProductListViewItem: React.FC<IProductThumbnail> = ({
     >
       <Image src={thumbnail} alt={title} width={210} height={210} />
       <div className={cx("product-detail", "ml-4")}>
-        <h4 className={cx("text-base font-medium text-[#1C1C1C] mb-4")}>
-          {title}
-        </h4>
+        <Link href={`/san-pham/${slug}` ?? '#'}>
+          <h4 className={cx("text-base font-medium text-[#1C1C1C] mb-4")}>
+            {title}
+          </h4>
+        </Link>
         {renderPrice()}
         <div
           className={cx(
