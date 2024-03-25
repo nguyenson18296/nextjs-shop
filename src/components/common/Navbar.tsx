@@ -4,8 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { IoLogIn } from "react-icons/io5";
 
+import { SearchBar } from "../SearchBar/SearchBar";
 import { NavbarDropdown } from "../Dropdown/Dropdown";
 import { BASE_URL } from "@/constants";
+import logo from '@/assets/logo.webp';
 
 interface INavItem {
   title: string;
@@ -54,6 +56,12 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav className="w-full bg-[#ffd400] py-3">
+      <div className="header__top">
+        <div className="flex items-center max-w-[1120px] mx-auto mb-2">
+            <Image src={logo} alt="logo" width={100} height={50} />
+            <SearchBar />
+        </div>
+      </div>
       <div className="header-main">
         <div className="max-w-[1120px] mx-auto my-0 flex items-center">
           <ul className="flex items-center justify-between flex-[0_0_80%]">
