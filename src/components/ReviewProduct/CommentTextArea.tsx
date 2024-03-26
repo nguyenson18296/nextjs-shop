@@ -1,8 +1,10 @@
 import React, { forwardRef, useCallback, useState } from "react";
 import Image from "next/image";
 import cx from "classnames";
+import { IoCloseCircle } from "react-icons/io5";
 
 import { Button } from "../common/Button";
+import { DragDropImageZone } from "./DragDropImageZone";
 import { KeyboardNameEnum } from "@/constants/types";
 
 export type Ref = HTMLTextAreaElement;
@@ -38,6 +40,8 @@ export const CommentTextArea = forwardRef<Ref, ICommentTextArea>(
   ) => {
     const user = JSON.parse(localStorage.getItem("user") || "");
     const [text, setText] = useState(value ?? "");
+    const [dragging, setDragging] = useState(false);
+    const [previewImages, setPreviewImages] = useState<string[]>([]);
 
     const onChange = useCallback(
       (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -51,13 +55,15 @@ export const CommentTextArea = forwardRef<Ref, ICommentTextArea>(
       setIsEdit?.(false);
     }, [setIsEdit]);
 
-    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-      console.log("e.key", e.key);
-      if (e.key === KeyboardNameEnum.ESCAPE) {
-        console.log("zzzzz");
-        setIsEdit?.(false);
-      }
-    }, [setIsEdit]);
+    const handleKeyDown = useCallback(
+      (e: React.KeyboardEvent) => {
+        if (e.key === KeyboardNameEnum.ESCAPE) {
+          console.log("zzzzz");
+          setIsEdit?.(false);
+        }
+      },
+      [setIsEdit]
+    );
 
     const onSubmit = useCallback(
       (e: React.SyntheticEvent) => {
@@ -87,12 +93,53 @@ export const CommentTextArea = forwardRef<Ref, ICommentTextArea>(
       [onEditComment, setIsEdit, comment_id, parent_comment_id, text]
     );
 
+    const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      e.dataTransfer.setData("text/plain", ""); // Required for Firefox
+      setDragging(true);
+    }, []);
+
+    const handleDragLeave = useCallback(() => {
+      setDragging(false);
+    }, []);
+
+    const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      setDragging(false);
+      const files = e.dataTransfer.files; // Get the dropped file
+      console.log("files", files);
+      if (files) {
+        // const previewImage = URL.createObjectURL(file);
+        // setPreviewImages(previewImage);
+        let src: string[] = [];
+        Array.from(files).forEach(file => {
+          const previewImage = URL.createObjectURL(file);
+          src.push(previewImage);
+        })
+        console.log("src", src);
+        setPreviewImages(src);
+      }
+    }, []);
+
+    if (dragging) {
+      return (
+        <DragDropImageZone
+          handleDragLeave={handleDragLeave}
+          handleDrop={handleDrop}
+        />
+      );
+    }
+
     return (
       <form
         className={cx("write-review-section w-full", classNames)}
         onKeyDown={handleKeyDown}
       >
-        <div className="flex items-start">
+        <div
+          className="flex items-start"
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+        >
           <Image alt={user.username} src={user.avatar} width={50} height={50} />
           <textarea
             value={text}
@@ -109,7 +156,7 @@ export const CommentTextArea = forwardRef<Ref, ICommentTextArea>(
             onClick={onCancel}
             name="Huỷ"
             type="button"
-            buttonType='secondary'
+            buttonType="secondary"
           />
           <Button
             onClick={isEditMode ? onEdit : onSubmit}
@@ -118,6 +165,24 @@ export const CommentTextArea = forwardRef<Ref, ICommentTextArea>(
           />
         </div>
         <div className="clear-both" />
+        <div className="flex items-center">
+        {previewImages.length > 0 && (
+          previewImages.map(src => (
+              <div
+                key={src}
+                className="relative first:ml-0 ml-2"
+              >
+                <Image
+                src={src}
+                alt="preview-img"
+                width={80}
+                height={80}
+              />
+              <IoCloseCircle className="absolute right-0 top-0 cursor-pointer" />
+              </div>
+          ))
+        )}
+        </div>
       </form>
     );
   }
