@@ -1,6 +1,5 @@
 import React from "react";
-import { FaCartShopping } from "react-icons/fa6";
-import { FaHeart } from "react-icons/fa6";
+import { FaCartShopping, FaHeart } from "react-icons/fa6";
 
 import { InputSearch } from "../InputSearch/InputSearch";
 import { HeaderMenu } from "./HeaderMenu";
