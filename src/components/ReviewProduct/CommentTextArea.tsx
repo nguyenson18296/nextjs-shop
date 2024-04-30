@@ -58,7 +58,6 @@ export const CommentTextArea = forwardRef<Ref, ICommentTextArea>(
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
         if (e.key === KeyboardNameEnum.ESCAPE) {
-          console.log("zzzzz");
           setIsEdit?.(false);
         }
       },

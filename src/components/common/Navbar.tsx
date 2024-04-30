@@ -44,6 +44,7 @@ export const Navbar: React.FC = () => {
         <NavbarDropdown />
       )
     }
+
     return (
       <a href="/dang-nhap" className="flex justify-end items-center">
             <IoLogIn />
