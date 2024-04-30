@@ -13,6 +13,7 @@ export interface IProductDetail {
   cover_photo: string;
   content: string;
   slug: string;
+  created_at: string;
   user: {
     username: string;
     avatar: string;
@@ -32,10 +33,8 @@ export const RelatedPosts: React.FC = () => {
     getRandomPosts();
   }, [getRandomPosts]);
 
-  console.log("posts", posts);
-
   return (
-    <div className='mx-auto w-full max-w-w1336 pb-10'>
+    <div className='mx-auto w-full max-w-w1336 pt-10 pb-10'>
       <h2 className='px-4 py-4 text-2xl color-[#141414] font-semibold'>
         Related Posts
       </h2>

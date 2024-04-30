@@ -6,7 +6,7 @@ import { BASE_URL } from "@/constants";
 import {
   RelatedPosts,
   IProductDetail,
-} from "@/components/RelatedPosts/RelatedPosts";
+} from "@/components/Posts/RelatedPosts/RelatedPosts";
 import { Navbar } from "@/components/common/Navbar";
 
 const inter = Poppins({
@@ -22,6 +22,8 @@ interface IProducts {
 
 export default async function Page({ params: { slug } }: IProducts) {
   const items = (await getData(slug)) as IProductDetail;
+
+  const formatDate = (date: string) => new Date(date).toString();
 
   return (
     <>
@@ -47,7 +49,7 @@ export default async function Page({ params: { slug } }: IProducts) {
             </div>
             <div className="flex items-center flex-wrap">
               <div className="my-1 text-sm color-[#808080]">
-                Published 4 days ago
+                {formatDate(items.created_at)}
               </div>
             </div>
           </div>
@@ -66,6 +68,7 @@ export default async function Page({ params: { slug } }: IProducts) {
             dangerouslySetInnerHTML={{ __html: items.content }}
           />
         </div>
+        <div className="mt-[64px] w-full bg-[#d9d9d9] h-[1px]" />
         <RelatedPosts />
       </div>
     </>

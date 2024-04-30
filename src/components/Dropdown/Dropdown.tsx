@@ -1,3 +1,4 @@
+'use client'
 import { useCallback, useState, useEffect } from "react";
 import cx from "classnames";
 import Link from "next/link";
@@ -12,6 +13,7 @@ export const NavbarDropdown: React.FC = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const inCart = useAppSelector((state) => state.productsSlice.in_cart);
   const dispatch = useAppDispatch();
+  const access_token = localStorage.getItem('token');
 
   const user = useAppSelector(state => state.user.userProfile);
 
@@ -19,9 +21,13 @@ export const NavbarDropdown: React.FC = () => {
     const response = await fetch(`${BASE_URL}/users/1`);
     const data = await response.json();
     dispatch(getUsersProfile(data.data));
-    const getMyCartResponse = await fetch(`${BASE_URL}/cart/${data.data.id}`)
+    const getMyCartResponse = await fetch(`${BASE_URL}/cart`, {
+      headers: {
+        "Authorization": `Bearer ${access_token}`
+      }
+    })
     const dataMyCart = await getMyCartResponse.json();
-    dispatch(addToCart(dataMyCart.data.items.map((item: any) => item.product.id)))
+    dispatch(addToCart((dataMyCart.data || []).items.map((item: any) => item.product.id)))
   }, [dispatch]);
 
   useEffect(() => {

@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import { BASE_URL } from "@/constants";
 import { PostItem } from './PostItem';
 import { Navbar } from "@/components/common/Navbar";
+import { Headline } from "@/components/Posts/Headline/Headline";
 
 const inter = Poppins({
   weight: ["300", "400", "500", "600", "700"],
@@ -15,18 +16,21 @@ export default async function Page() {
   return (
     <>
       <Navbar />
-      <div className={`${inter.className} py-10 px-24`}>
-        {items.map((post: any) => (
-          <PostItem
-            key={post.id}
-            title={post.title}
-            slug={post.slug}
-            short_description={post.short_description}
-            created_at={post.created_at}
-            cover_photo={post.cover_photo}
-            user={post.user}
-          />
-        ))}
+      <div className="w-full mx-auto max-w-[1280px]">
+        <Headline posts={items} />
+        <div className={`${inter.className} py-10 px-24`}>
+          {items.map((post: any) => (
+            <PostItem
+              key={post.id}
+              title={post.title}
+              slug={post.slug}
+              short_description={post.short_description}
+              created_at={post.created_at}
+              cover_photo={post.cover_photo}
+              user={post.user}
+            />
+          ))}
+        </div>
       </div>
     </>
   )
@@ -34,7 +38,7 @@ export default async function Page() {
 
 async function getData() {
   const res = await fetch(`${BASE_URL}/posts`, {
-    cache: 'default'
+    cache: 'no-cache'
   });
 
   if (!res.ok) {
