@@ -17,11 +17,13 @@ export default async function Page() {
     <>
       <Navbar />
       <div className="w-full mx-auto max-w-[1280px]">
-        <Headline posts={items} />
+        <Headline posts={items.data} />
         <div className={`${inter.className} py-10 px-24`}>
-          {items.map((post: any) => (
+          {(items.data || []).map((post: any) => (
             <PostItem
               key={post.id}
+              id={post.id}
+              priority={post.priority}
               title={post.title}
               slug={post.slug}
               short_description={post.short_description}

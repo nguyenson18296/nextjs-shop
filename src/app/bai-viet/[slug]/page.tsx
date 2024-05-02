@@ -1,6 +1,7 @@
 /* eslint-disable react/no-danger */
 import { Poppins } from "next/font/google";
 import Image from "next/image";
+import Link from "next/link";
 
 import { BASE_URL } from "@/constants";
 import {
@@ -8,6 +9,7 @@ import {
   IProductDetail,
 } from "@/components/Posts/RelatedPosts/RelatedPosts";
 import { Navbar } from "@/components/common/Navbar";
+import placeholderAvatar from '@/assets/placeholder-avatar.jpeg'
 
 const inter = Poppins({
   weight: ["300", "400", "500", "600", "700"],
@@ -37,16 +39,18 @@ export default async function Page({ params: { slug } }: IProducts) {
             {items.short_description}
           </div>
           <div className="flex max-w-[680px] mx-auto items-center justify-between">
-            <div className="mr-[100px] my-[50px] flex items-center">
-              <Image
-                width={24}
-                height={24}
-                src={items.user.avatar}
-                alt={items.user.username}
-                className="rounded mr-2"
-              />
-              <span className="text-sm">{items.user.username}</span>
-            </div>
+            <Link href={`/bai-viet/tac-gia/${items.user.username}?tab=posts`}>
+              <div className="mr-[100px] my-[50px] flex items-center">
+                <Image
+                  width={24}
+                  height={24}
+                  src={items.user.avatar || placeholderAvatar}
+                  alt={items.user.username}
+                  className="rounded mr-2"
+                />
+                <span className="text-sm">{items.user.username}</span>
+              </div>
+            </Link>
             <div className="flex items-center flex-wrap">
               <div className="my-1 text-sm color-[#808080]">
                 {formatDate(items.created_at)}

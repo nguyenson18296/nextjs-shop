@@ -125,9 +125,6 @@ export const SearchResult = forwardRef<Ref, IProduct>(
     [display, selectedIndexes, openProductLink]
   );
 
-  console.log("selectedIndexes", selectedIndexes);
-  console.log("display", display);
-
   return (
     <div
       ref={dropdownRef}
