@@ -2,17 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-interface IPostItem {
-  title: string;
-  short_description: string;
-  cover_photo: string;
-  created_at: string;
-  slug: string;
-  user: {
-    username: string;
-    avatar: string;
-  }
-}
+import { IPostItem } from "@/libs/store/postsSlice";
 
 export const PostItem: React.FC<IPostItem> = ({
   title,

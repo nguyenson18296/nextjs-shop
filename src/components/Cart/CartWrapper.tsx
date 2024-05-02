@@ -94,7 +94,6 @@ export const CartWrapper: React.FC<ICart> = ({ carts }) => {
         }
     } catch (e) {
         console.error("error", e);
-        console.log("error", e);
     }
   }, [cartState]);
 

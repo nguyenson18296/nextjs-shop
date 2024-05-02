@@ -27,7 +27,6 @@ export const LoginForm: React.FC = () => {
 
   const onSubmit: SubmitHandler<ILoginForm> = useCallback(
     async (data) => {
-        console.log("data", data);
         try {
             const response = await fetch(`${BASE_URL}/auth/login`, {
                 method: "POST",

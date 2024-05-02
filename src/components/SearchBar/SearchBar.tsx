@@ -44,7 +44,6 @@ export const SearchBar: React.FC = () => {
   useOnClickOutside(ref, handleClickOutside);
 
   const onKeyPressed = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log("inputRef", e.key);
     if (e.key === "ArrowDown") {
         e.preventDefault(); // Prevent scrolling the page
         inputRef.current?.blur();

@@ -106,7 +106,6 @@ export const CommentTextArea = forwardRef<Ref, ICommentTextArea>(
       e.preventDefault();
       setDragging(false);
       const files = e.dataTransfer.files; // Get the dropped file
-      console.log("files", files);
       if (files) {
         // const previewImage = URL.createObjectURL(file);
         // setPreviewImages(previewImage);
@@ -115,7 +114,6 @@ export const CommentTextArea = forwardRef<Ref, ICommentTextArea>(
           const previewImage = URL.createObjectURL(file);
           src.push(previewImage);
         })
-        console.log("src", src);
         setPreviewImages(src);
       }
     }, []);
