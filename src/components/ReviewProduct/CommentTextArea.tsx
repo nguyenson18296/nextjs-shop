@@ -6,6 +6,7 @@ import { IoCloseCircle } from "react-icons/io5";
 import { Button } from "../common/Button";
 import { DragDropImageZone } from "./DragDropImageZone";
 import { KeyboardNameEnum } from "@/constants/types";
+import { IUser } from "@/types/users.type";
 
 export type Ref = HTMLTextAreaElement;
 
@@ -22,6 +23,7 @@ interface ICommentTextArea {
     parent_comment_id?: number
   ) => void;
   setIsEdit?: (edit: boolean) => void;
+  user: IUser
 }
 
 export const CommentTextArea = forwardRef<Ref, ICommentTextArea>(
@@ -35,10 +37,10 @@ export const CommentTextArea = forwardRef<Ref, ICommentTextArea>(
       onEditComment,
       onSubmitComment,
       setIsEdit,
+      user
     },
     ref
   ) => {
-    const user = JSON.parse(localStorage.getItem("user") || "");
     const [text, setText] = useState(value ?? "");
     const [dragging, setDragging] = useState(false);
     const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -110,10 +112,10 @@ export const CommentTextArea = forwardRef<Ref, ICommentTextArea>(
         // const previewImage = URL.createObjectURL(file);
         // setPreviewImages(previewImage);
         let src: string[] = [];
-        Array.from(files).forEach(file => {
+        Array.from(files).forEach((file) => {
           const previewImage = URL.createObjectURL(file);
           src.push(previewImage);
-        })
+        });
         setPreviewImages(src);
       }
     }, []);
@@ -163,22 +165,13 @@ export const CommentTextArea = forwardRef<Ref, ICommentTextArea>(
         </div>
         <div className="clear-both" />
         <div className="flex items-center">
-        {previewImages.length > 0 && (
-          previewImages.map(src => (
-              <div
-                key={src}
-                className="relative first:ml-0 ml-2"
-              >
-                <Image
-                src={src}
-                alt="preview-img"
-                width={80}
-                height={80}
-              />
-              <IoCloseCircle className="absolute right-0 top-0 cursor-pointer" />
+          {previewImages.length > 0 &&
+            previewImages.map((src) => (
+              <div key={src} className="relative first:ml-0 ml-2">
+                <Image src={src} alt="preview-img" width={80} height={80} />
+                <IoCloseCircle className="absolute right-0 top-0 cursor-pointer" />
               </div>
-          ))
-        )}
+            ))}
         </div>
       </form>
     );

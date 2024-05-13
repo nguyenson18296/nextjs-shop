@@ -15,7 +15,8 @@ interface INavItem {
   slug: string;
 }
 
-const ISSERVER = typeof window === "undefined";
+// const ISSERVER = typeof window === "undefined";
+// const cookies = new Cookies();
 
 export const Navbar: React.FC = () => {
   const [navItems, setNavItems] = useState<INavItem[]>([]);

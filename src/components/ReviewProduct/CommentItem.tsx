@@ -3,48 +3,50 @@ import cx from "classnames";
 import { FaReply } from "react-icons/fa";
 import Image from "next/image";
 import dayjs from "dayjs";
+import { BsThreeDots } from "react-icons/bs";
 
 import { CommentTextArea } from "./CommentTextArea";
 import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 import { DEFAULT_AVATAR_URL } from "@/constants/index";
+import { IUser } from "@/types/users.type";
 
 interface ICommentItem {
+  is_mine: boolean;
   is_reply_comment?: boolean;
   id: number;
   parent_comment_id?: number;
-  username: string;
   date: string;
   content: string;
   src?: string;
   onReplyComment?: (e: React.BaseSyntheticEvent) => void;
   onOpenDeleteModal: () => void;
   onSubmitComment: (content: string, comment_id?: number, parent_comment_id?: number) => void;
+  user: IUser;
 }
 
 export const CommentItem: React.FC<ICommentItem> = ({
+  is_mine,
   is_reply_comment,
   id,
   parent_comment_id,
-  username,
   date,
   content,
-  src,
+  user,
   onReplyComment,
   onOpenDeleteModal,
   onSubmitComment
 }) => {
-  const user = JSON.parse(localStorage.getItem("user") || "");
   const [openDropdown, setOpenDropdown] = useState(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const ref = useRef(null);
   const textarea = useRef<(HTMLTextAreaElement | null)>(null);
 
   const getAvatar = useMemo(() => {
-    if (src) {
-      return src;
+    if (user.avatar) {
+      return user.avatar;
     }
     return DEFAULT_AVATAR_URL;
-  }, [src]);
+  }, [user.avatar]);
 
   const onOpenDropdown = useCallback(() => {
     setOpenDropdown((open) => !open);
@@ -90,19 +92,22 @@ export const CommentItem: React.FC<ICommentItem> = ({
           classNames="mt-2"
           onEditComment={onSubmitComment}
           setIsEdit={setIsEdit}
+          user={user}
         />
       ) : (
         <>
           <div className="flex items-start flex-[0_0_95%]">
             <Image alt="avatar" src={getAvatar} width={40} height={40} />
-            <div className="ml-2">
-              <div className="flex items-center">
-                <span className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold">
-                  {username}
-                </span>
-                <span className="text-sm text-gray-600 dark:text-gray-400">
-                  <time>{dayjs(date).format("DD-MM-YYYY HH:mm:ss")}</time>
-                </span>
+            <div className="ml-2 w-full">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <span className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold">
+                    {user.username}
+                  </span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    <time>{dayjs(date).format("DD-MM-YYYY HH:mm:ss")}</time>
+                  </span>
+                </div>
               </div>
               <div className="comment-content">{content}</div>
               {!is_reply_comment && (
@@ -119,7 +124,7 @@ export const CommentItem: React.FC<ICommentItem> = ({
               )}
             </div>
           </div>
-          {user.role === "admin" && (
+          {user.role === "admin" || is_mine && (
             <div className="">
               <button
                 onClick={onOpenDropdown}

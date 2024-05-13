@@ -18,7 +18,7 @@ export const NavbarDropdown: React.FC = () => {
   const user = useAppSelector(state => state.user.userProfile);
 
   const getUserProfile = useCallback(async () => {
-    const response = await fetch(`${BASE_URL}/users/1`);
+    const response = await fetch(`${BASE_URL}/users`);
     const data = await response.json();
     dispatch(getUsersProfile(data.data));
     const getMyCartResponse = await fetch(`${BASE_URL}/cart`, {
@@ -28,7 +28,7 @@ export const NavbarDropdown: React.FC = () => {
     })
     const dataMyCart = await getMyCartResponse.json();
     dispatch(addToCart((dataMyCart.data || []).items.map((item: any) => item.product.id)))
-  }, [dispatch]);
+  }, [dispatch, access_token]);
 
   useEffect(() => {
     getUserProfile();
