@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef } from "react";
+import { useCallback, useState, useRef, useEffect } from "react";
 
 import { CommentItem } from "./CommentItem";
 import { CommentTextArea } from "./CommentTextArea";
@@ -13,16 +13,15 @@ export interface IComment {
   created_at: string;
   user: IUser;
   replies: IComment[];
+  is_mine: boolean;
 }
 
 interface IReviewProduct {
   product_id: number;
-  comments: IComment[];
 }
 
 export const ReviewProduct: React.FC<IReviewProduct> = ({
   product_id,
-  comments,
 }) => {
   const user = JSON.parse(localStorage.getItem("user") || "");
   const [isReplyComment, setIsReplyComment] = useState<boolean>(false);
@@ -30,9 +29,24 @@ export const ReviewProduct: React.FC<IReviewProduct> = ({
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const textarea = useRef<(HTMLTextAreaElement | null)[]>([]);
 
-  const [userComments, setUserComments] = useState(comments);
+  const [userComments, setUserComments] = useState<IComment[]>([]);
   const [selectedParentCommentId, setSelectedParentCommentId] = useState(0);
   const [selectedCommentId, setSelectedCommentId] = useState(0);
+  const access_token = localStorage.getItem('token');
+
+  const getComments = useCallback(async () => {
+    const response = await fetch(`${BASE_URL}/product-reviews/${product_id}`, {
+      headers: {
+        "Authorization": `Bearer ${access_token}`
+      }
+    })
+    const data = await response.json();
+    setUserComments(data.data)
+  }, [product_id, access_token]);
+
+  useEffect(() => {
+    getComments();
+  }, [getComments]);
 
   const onReplyComment = useCallback(
     (_e: React.BaseSyntheticEvent, index: number) => {
@@ -199,8 +213,9 @@ export const ReviewProduct: React.FC<IReviewProduct> = ({
                 key={item.id}
               >
                 <CommentItem
+                  is_mine={item.is_mine}
                   id={item.id}
-                  username={item.user.username}
+                  user={item.user}
                   date={item.created_at}
                   content={item.content}
                   onReplyComment={(e: React.BaseSyntheticEvent) =>
@@ -210,28 +225,33 @@ export const ReviewProduct: React.FC<IReviewProduct> = ({
                   onSubmitComment={onEditComment}
                 />
                 <div className="ml-6">
-                  {item.replies.length > 0 &&
-                    item.replies.map((itemReplies) => (
-                      <CommentItem
-                        is_reply_comment={true}
-                        key={itemReplies.id}
-                        id={itemReplies.id}
-                        parent_comment_id={item.id}
-                        username={itemReplies.user.username}
-                        date={itemReplies.created_at}
-                        content={itemReplies.content}
-                        onOpenDeleteModal={() =>
-                          onOpenDeleteModal(item.id, itemReplies.id)
-                        }
-                        onSubmitComment={onEditComment}
-                      />
-                    ))}
+                  {item?.replies?.length > 0 && (
+                    (item.replies || []).length > 0 &&
+                      item.replies.map((itemReplies) => (
+                        <CommentItem
+                          is_mine={itemReplies.is_mine}
+                          is_reply_comment={true}
+                          key={itemReplies.id}
+                          id={itemReplies.id}
+                          parent_comment_id={item.id}
+                          user={item.user}
+                          date={itemReplies.created_at}
+                          content={itemReplies.content}
+                          onOpenDeleteModal={() =>
+                            onOpenDeleteModal(item.id, itemReplies.id)
+                          }
+                          onSubmitComment={onEditComment}
+                        />
+                      ))
+                    )}
                   {isReplyComment && activeReplyForm === index && (
                     <CommentTextArea
                       parent_comment_id={item.id}
                       classNames="mt-2"
                       ref={(el) => (textarea.current[index] = el)}
+                      setIsEdit={() => setIsReplyComment(false)}
                       onSubmitComment={onSubmitComment}
+                      user={user}
                     />
                   )}
                 </div>
@@ -243,7 +263,7 @@ export const ReviewProduct: React.FC<IReviewProduct> = ({
             Hiện tại sản phẩm chưa có đánh giá
           </div>
         )}
-        <CommentTextArea classNames="mt-4" onSubmitComment={onSubmitComment} />
+        <CommentTextArea user={user} classNames="mt-4" onSubmitComment={onSubmitComment} />
       </div>
     </>
   );
