@@ -35,8 +35,8 @@ export const ProductListViewItem: React.FC<IProductThumbnail> = ({
   thumbnail,
   title,
   price,
-  discount_price,
-  description,
+  discount_price = 0,
+  short_description,
   slug,
 }) => {
   const renderPrice = useCallback(() => {
@@ -67,7 +67,7 @@ export const ProductListViewItem: React.FC<IProductThumbnail> = ({
     >
       <Image src={thumbnail} alt={title} width={210} height={210} />
       <div className={cx("product-detail", "ml-4")}>
-        <Link href={`/san-pham/${slug}` ?? '#'}>
+        <Link prefetch={true} href={`/san-pham/${slug}` ?? "#"}>
           <h4 className={cx("text-base font-medium text-[#1C1C1C] mb-4")}>
             {title}
           </h4>
@@ -79,9 +79,12 @@ export const ProductListViewItem: React.FC<IProductThumbnail> = ({
             "my-3 text-sm font-normal text-[#505050]"
           )}
         >
-          {description}
+          {short_description}
         </div>
-        <Link className={cx("text-[#0D6EFD] text-sm mt-2")} href={`/san-pham/${slug}` ?? '#'}>
+        <Link
+          className={cx("text-[#0D6EFD] text-sm mt-2")}
+          href={`/san-pham/${slug}` ?? "#"}
+        >
           View detail
         </Link>
       </div>

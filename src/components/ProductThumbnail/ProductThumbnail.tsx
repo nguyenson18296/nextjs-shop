@@ -19,7 +19,7 @@ export interface IProductThumbnail {
   title: string;
   price: string;
   discount_price?: string;
-  description?: string;
+  short_description?: string;
   images?: string[];
   slug: string;
 }
