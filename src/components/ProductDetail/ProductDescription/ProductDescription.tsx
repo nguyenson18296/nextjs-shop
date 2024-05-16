@@ -9,7 +9,10 @@ import {
 } from "react-icons/md";
 
 import { ITab, Tabs } from "@/components/common/Tabs/Tabs";
-import { IComment, ReviewProduct } from "@/components/ReviewProduct/ReviewProduct";
+import {
+  IComment,
+  ReviewProduct,
+} from "@/components/ReviewProduct/ReviewProduct";
 
 const LIST_TABS = [
   {
@@ -39,19 +42,20 @@ interface IDescription {
 }
 
 const Description: React.FC<IDescription> = ({ description }) => {
-  return <div>{description}</div>;
+  // eslint-disable-next-line react/no-danger
+  return <div dangerouslySetInnerHTML={{ __html: description }} />;
 };
 
 interface IProductDescription {
   id: number;
   description: string;
-  comments: IComment[]
+  comments: IComment[];
 }
 
 export const ProductDescription: React.FC<IProductDescription> = ({
   id,
   description,
-  comments
+  comments,
 }) => {
   const [selectedTab, setSelectedTab] = useState<ITab>(LIST_TABS[0]);
 
@@ -83,7 +87,9 @@ export const ProductDescription: React.FC<IProductDescription> = ({
         activeTab={selectedTab}
         onSelectTab={onSelectTab}
       />
-      <div className="mt-2 min-h-[200px] h-[calc(100%-50px)] relative">{renderTabContent()}</div>
+      <div className="mt-2 min-h-[200px] h-[calc(100%-50px)] relative">
+        {renderTabContent()}
+      </div>
     </div>
   );
 };

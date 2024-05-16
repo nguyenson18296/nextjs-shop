@@ -1,5 +1,6 @@
 import { Poppins } from "next/font/google";
-import cx from 'classnames'
+import cx from "classnames";
+import { cookies } from "next/headers";
 
 import { Navbar } from "@/components/common/Navbar";
 import { BASE_URL } from "@/constants";
@@ -14,17 +15,22 @@ export default async function Cart() {
   const cart = await getData();
 
   return (
-   <>
-    <Navbar />
-     <div className={cx(inter.className, "container w-[1200px] mx-auto my-0")}>
+    <>
+      <Navbar />
+      <div className={cx(inter.className, "container w-[1200px] mx-auto my-0")}>
         <CartWrapper carts={cart.data.items} />
-     </div>
-   </>
-  )
+      </div>
+    </>
+  );
 }
 
 async function getData() {
-  const res = await fetch(`${BASE_URL}/cart/1`, {
+  const cookieStore = cookies();
+  const token = cookieStore.get("token");
+  const res = await fetch(`${BASE_URL}/cart`, {
+    headers: {
+      Authorization: `Bearer ${token?.value}`,
+    },
     cache: "no-store",
   });
 
