@@ -25,8 +25,6 @@ export const FilterBarSectionItem: React.FC<IFilterBarSectionItem> = ({
 }) => {
   const [selectedFilter, setSelectedFilter] = useState<IFilterValue[]>([]);
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
   const dispatch = useAppDispatch();
   const filters = useAppSelector((state) => state.productsSlice.filters);
 

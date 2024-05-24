@@ -13,11 +13,12 @@ const inter = Poppins({
 
 export default async function Cart() {
   const cart = await getData();
+  console.log('cart', cart);
 
   return (
     <>
       <Navbar />
-      <div className={cx(inter.className, "container w-[1200px] mx-auto my-0")}>
+      <div className={cx(inter.className, "container w-[1400px] mx-auto my-0")}>
         <CartWrapper carts={cart.data.items} />
       </div>
     </>
@@ -31,7 +32,7 @@ async function getData() {
     headers: {
       Authorization: `Bearer ${token?.value}`,
     },
-    cache: "no-store",
+    cache: 'no-store'
   });
 
   if (!res.ok) {

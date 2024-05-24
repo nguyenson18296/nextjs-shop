@@ -67,6 +67,9 @@ const productsSlice = createSlice({
         }
       }
     },
+    clearCart(state) {
+      state.in_cart = [];
+    }
   },
 });
 
@@ -77,6 +80,7 @@ export const {
   getTotal,
   setIsLoading,
   addToCart,
+  clearCart,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;

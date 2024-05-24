@@ -25,6 +25,7 @@ export interface ICartItem {
   checked: boolean;
   id: number;
   quantity: number;
+  isCheckedOut?: boolean;
   product: IProductInCart;
   onChangeQuantityItem: (index: number, quantity: number) => void;
   onChangeCheckedItem: (index: number, checked: boolean) => void;
@@ -37,6 +38,7 @@ export const CartItem: React.FC<ICartItem> = ({
   index,
   quantity,
   product,
+  isCheckedOut,
   onChangeQuantityItem,
   onChangeCheckedItem,
   onDeleteCartItem,
@@ -93,6 +95,8 @@ export const CartItem: React.FC<ICartItem> = ({
     setOpen(false);
   }, []);
 
+  const tableWidth = !isCheckedOut ? [40, 20, 10, 15, 10] : [40, 25, 15, 10, 0]
+
   return (
     <>
       <Modal
@@ -105,17 +109,21 @@ export const CartItem: React.FC<ICartItem> = ({
       </Modal>
       <div className="cart-item bg-[#fff] rounded-sm shadow-md mb-4">
         <div className="p-4 flex items-center">
-          <div className="flex items-center mt-4 mr-2">
-            <input
-              checked={checkedState}
-              onChange={onChange}
-              id="orange-checkbox"
-              type="checkbox"
-              value=""
-              className="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-            />
-          </div>
-          <div className="flex items-center w-[40%]">
+          {!isCheckedOut && (
+            <div className="flex items-center mt-4 mr-2">
+              <input
+                checked={checkedState}
+                onChange={onChange}
+                id="orange-checkbox"
+                type="checkbox"
+                value=""
+                className="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              />
+            </div>
+          )}
+          <div style={{
+            width: `${tableWidth[0]}%`
+          }} className="flex items-center">
             <div className="flex items-center">
               <div className="min-w-[100px]">
                 <Link href={`/san-pham/${product.slug}`}>
@@ -132,7 +140,9 @@ export const CartItem: React.FC<ICartItem> = ({
               </div>
             </div>
           </div>
-          <div className="flex items-center w-[20%]">
+          <div style={{
+            width: `${tableWidth[1]}%`
+          }} className="flex items-center">
             <div className="flex items-center">
               <DisplayPrice
                 price={product.price}
@@ -140,17 +150,29 @@ export const CartItem: React.FC<ICartItem> = ({
               />
             </div>
           </div>
-          <div className="w-[10%]">
-            <ProductInputQuantity
-              disabled={quantityProduct < 1}
-              quantity={quantityProduct}
-              setQuantity={onChangeQuantity}
-            />
+          <div style={{
+            width: `${tableWidth[2]}%`
+          }} className="flex items-center justify-center">
+            {isCheckedOut ? (
+              quantityProduct
+            ) : (
+              <ProductInputQuantity
+                disabled={quantityProduct < 1}
+                quantity={quantityProduct}
+                setQuantity={onChangeQuantity}
+              />
+            )}
           </div>
-          <div className="text-center w-[15%]">{formatVndCurrency(amount)}</div>
-          <div className="w-[10%]">
-            <Button buttonType="danger" name="Xoá" onClick={openConfirmDeleteModal} />
-          </div>
+          <div style={{
+            width: `${tableWidth[3]}%`
+          }} className="text-center">{formatVndCurrency(amount)}</div>
+          {!isCheckedOut && (
+            <div style={{
+              width: `${tableWidth[4]}%`
+            }} className="w-[10%] flex justify-center">
+              <Button buttonType="danger" name="Xoá" onClick={openConfirmDeleteModal} />
+            </div>
+          )}
         </div>
       </div>
     </>

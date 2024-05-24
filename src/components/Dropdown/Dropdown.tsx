@@ -27,7 +27,8 @@ export const NavbarDropdown: React.FC = () => {
       }
     })
     const dataMyCart = await getMyCartResponse.json();
-    dispatch(addToCart((dataMyCart.data || []).items.map((item: any) => item.product.id)))
+    console.log('dataMyCart', dataMyCart);
+    dispatch(addToCart((dataMyCart?.data?.items || []).map((item: any) => item.product.id)))
   }, [dispatch, access_token]);
 
   useEffect(() => {
