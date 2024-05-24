@@ -18,9 +18,23 @@ interface INavItem {
 // const ISSERVER = typeof window === "undefined";
 // const cookies = new Cookies();
 
+
+// let access_token = '';
+
+// if (typeof window !== 'undefined') {
+//   access_token = localStorage.getItem("token") || ''
+// }
+
+// console.log('access_token', access_token);
+
 export const Navbar: React.FC = () => {
   const [navItems, setNavItems] = useState<INavItem[]>([]);
-  const access_token = localStorage.getItem('token');
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const token = localStorage.getItem("token") || '';
+    setToken(token);
+  }, []);
 
   const getCategories = useCallback(async () => {
     const response = await fetch(`${BASE_URL}/categories`, {
@@ -40,7 +54,7 @@ export const Navbar: React.FC = () => {
   }, [getCategories]);
 
   const renderLoginButton = useCallback(() => {
-    if (access_token) {
+    if (token) {
       return (
         <NavbarDropdown />
       )
@@ -54,7 +68,7 @@ export const Navbar: React.FC = () => {
             </span>
         </a>
     )
-  }, [access_token]);
+  }, [token]);
 
   return (
     <nav className="w-full bg-[#ffd400] py-3">

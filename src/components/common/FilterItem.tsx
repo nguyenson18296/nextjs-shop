@@ -1,14 +1,13 @@
 import { useCallback } from "react";
 import cx from "classnames";
 import { IoClose } from "react-icons/io5";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import { useSetSearchParams } from "@/libs/hooks/useSetSearchParams";
 import { useAppSelector, useAppDispatch } from "@/libs/hooks/useRedux";
 import { IFIlterCard, setFilters } from "@/libs/store/listProductsSlice";
 
 const FilterCard: React.FC<IFIlterCard> = ({ id, name }) => {
-  const router = useRouter();
   const pathname = usePathname();
   const dispatch = useAppDispatch();
   const filters = useAppSelector((state) => state.productsSlice.filters);

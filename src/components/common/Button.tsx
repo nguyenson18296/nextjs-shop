@@ -1,5 +1,4 @@
 import { ButtonHTMLAttributes, ReactElement, ReactNode, useMemo } from "react";
-import { IconType } from "react-icons";
 import cx from 'classnames';
 
 enum ButtonEnum {

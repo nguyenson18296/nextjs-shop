@@ -13,6 +13,8 @@ import { addToCart } from "@/libs/store/listProductsSlice";
 import { BASE_URL } from "@/constants";
 import { ProductInputQuantity } from "@/components/common/ProductInputQuantity/ProductInputQuantity";
 
+const access_token = localStorage.getItem('token');
+
 export const ProductIntroduce: React.FC<IProductDetail> = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
   const dispatch = useAppDispatch();
@@ -20,6 +22,7 @@ export const ProductIntroduce: React.FC<IProductDetail> = ({ product }) => {
   const [openModal, setOpenModal] = useState(false);
 
   const onAddToCart = useCallback(async () => {
+
     const formData = {
       user_id: user.id,
       product_id: product.id,
@@ -29,6 +32,7 @@ export const ProductIntroduce: React.FC<IProductDetail> = ({ product }) => {
       await fetch(`${BASE_URL}/cart/add`, {
         method: "POST",
         headers: {
+          "Authorization": `Bearer ${access_token}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
